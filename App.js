@@ -9,7 +9,6 @@ var prevDate = new Date( date.getFullYear(), date.getMonth(), 0).getDate();
 var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 var today = new Date();
-console.log(today);
 
 document.getElementById("month-date").innerHTML = date.toDateString();
 document.getElementById("month").innerHTML = months[date.getMonth()];
