@@ -3,11 +3,17 @@ var dt = new Date();
             dt.setDate(1);
             var day = dt.getDay();
             var today = new Date();
-            
-            var endDate = new Date(dt.getFullYear(),dt.getMonth() + 1,0).getDate();
+            var endDate = new Date(
+                dt.getFullYear(),
+                dt.getMonth() + 1,
+                0
+            ).getDate();
 
-            var prevDate = new Date(dt.getFullYear(), dt.getMonth(), 0).getDate();
-            
+            var prevDate = new Date(
+                dt.getFullYear(),
+                dt.getMonth(),
+                0
+            ).getDate();
             var months = [
                 "January",
                 "February",
