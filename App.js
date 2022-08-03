@@ -29,7 +29,7 @@
         "December"
         ]
         document.getElementById("month").innerHTML = months[dt.getMonth()];
-        document.getElementById("date_str").innerHTML = dt.toDateString();
+        document.getElementById("month-date").innerHTML = dt.toDateString();
         var cells = "";
         for (x = day; x > 0; x--) {
         cells += "<div class='prev_date'>" + (prevDate - x + 1) + "</div>";
