@@ -1,5 +1,5 @@
         var dt = new Date();
-        function renderDate() {
+        function RenderDate() {
         dt.setDate(1);
         var day = dt.getDay();
         var today = new Date();
@@ -36,19 +36,22 @@
         }
         console.log(day);
         for (i = 1; i <= endDate; i++) {
-        if (i == today.getDate() && dt.getMonth() == today.getMonth()) cells += "<div class='today'>" + i + "</div>";
-        else
-            cells += "<div>" + i + "</div>";
+        if (i == today.getDate() && dt.getMonth() == today.getMonth())
+        {
+                cells += "<div class='today'>" + i + "</div>";
+        }else{
+                cells += "<div>" + i + "</div>";
+        }
         }
         document.getElementsByClassName("days")[0].innerHTML = cells;
 
         }
 
         function moveDate(para) {
-        if(para == "prev") {
+        if(para == 'prev') {
         dt.setMonth(dt.getMonth() - 1);
         } else if(para == 'next') {
         dt.setMonth(dt.getMonth() + 1);
         }
-        renderDate();
+        RenderDate();
         }
