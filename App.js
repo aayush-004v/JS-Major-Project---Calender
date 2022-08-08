@@ -1,19 +1,25 @@
-var dt = new Date();
-function RenderDate() {
-    var day = dt.getDay();
-    var today = new Date();
-    var endDate = new Date(
-        dt.getFullYear(),
-        dt.getMonth() + 1,
+let date = new Date();
+
+const renderDates = () => {
+
+    getWeather();
+
+    date.setDate(1);
+    let day = date.getDay();
+    let today = new Date();
+    let endDate = new Date(
+        date.getFullYear(),
+        date.getMonth() + 1,
         0
     ).getDate();
 
-    var prevDate = new Date(
-        dt.getFullYear(),
-        dt.getMonth(),
+    let prevDate = new Date(
+        date.getFullYear(),
+        date.getMonth(),
         0
     ).getDate();
-    var months = [
+
+    let months = [
         "January",
         "February",
         "March",
@@ -27,52 +33,88 @@ function RenderDate() {
         "November",
         "December"
     ]
-    document.getElementById("month").innerHTML = months[dt.getMonth()];
-    document.getElementById("month-date").innerHTML = dt.toDateString();
-    var cells = "";
-    isToday = false;
+
+    document.getElementById("month").innerHTML = months[date.getMonth()];
+    document.getElementById("month-date").innerHTML = date.toDateString();
+
+    let cells = "";
     for (x = day; x > 0; x--) {
         cells += "<div class='prev_date iterator'>" + (prevDate - x + 1) + "</div>";
     }
     // console.log(day);
     for (i = 1; i <= endDate; i++) {
-        if (i == today.getDate() && dt.getMonth() == today.getMonth()) {
-                isToday = true;
-            // cells += "<div class='today iterator'>" + i + "</div>";
+        if (i == today.getDate() && date.getMonth() == today.getMonth()) {
+            cells += "<div class='today iterator'>" + i + "</div>";
         } else {
-            isToday = false;
-            // cells += "<div class='iterator'>" + i + "</div>";
+            cells += "<div class='iterator'>" + i + "</div>";
         }
-        cells += `<div class=${isToday? 'today' :''} iterator>${i} ${eventAvailableDay(i) ? '*': ""} </div>`;   
     }
+
     document.getElementsByClassName("days")[0].innerHTML = cells;
-
 }
 
-const eventAvailableDay = (day) =>{
-    let eventArr = getLocalStrgArrData();
-    let month = dt.getMonth();
-    if(day < 10) {
-        day = "0"+day
-    }
-    if(month < 10){
-        month = "0"+month;
-    }
-    date = `${day}-${month}-${dt.getFullYear()}`;
-    
-    return eventArr.some(event=>event.substring(0,10).includes(date))
-
-}
-
-function moveDate(para) {
+const moveDate = (para) => {
     if (para == 'prev') {
-        dt.setMonth(dt.getMonth() - 1);
+        date.setMonth(date.getMonth() - 1);
     } else if (para == 'next') {
-        dt.setMonth(dt.getMonth() + 1);
+        date.setMonth(date.getMonth() + 1);
     }
-    RenderDate();
+
+    renderDates();
 }
 
+
+// Getting coordinates(location) and weather
+const getWeather = () => {
+    let temperature = document.getElementById("temperature");
+    let description = document.getElementById("description");
+    let location = document.getElementById("location");
+
+    let api = "https://api.openweathermap.org/data/2.5/weather";
+    let apiKey = "f146799a557e8ab658304c1b30cc3cfd";
+
+    location.innerHTML = "Locating...";
+
+    navigator.geolocation.getCurrentPosition(success, error);
+
+    function success(position) {
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+
+        let url = api + "?lat=" + latitude + "&lon=" + longitude + "&appid=" + apiKey + "&units=imperial";
+        
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            //console.log(data);
+            let temp = data.main.temp;
+            //C = 5/9(F-32)
+            //temp = 5/9(temp-32);
+            let C = 5/9 *(temp-32);
+            temperature.innerHTML = C.toFixed(2) + "° c";
+            let place = data.name + ', ' + data.sys.country;
+            location.innerHTML = place;
+            description.innerHTML = data.weather[0].main;
+        });
+    }
+
+    function error() {
+        location.innerHTML = "Unable to retrieve your location";
+    }
+}
+
+
+// Getting time
+const getTime = () => {
+    let date =  new Date();
+    let time = date.toLocaleTimeString();
+    document.getElementById("time").innerText = time;
+}
+
+setInterval(getTime, 1000);
+
+
+//events
 function getLocalStrgArrData() {
     return JSON.parse(localStorage.getItem('events'));
 }
@@ -87,28 +129,27 @@ function deleteEvent(delId) {
     setLocalStrgArrData(arr);
     showEvents();
 }
-function confirmation(delId) {
 
+function confirmation(delId) {
     if (confirm("Are you sure want to delete this event...?") == true) {
         deleteEvent(delId);
     }
 }
+
 function showEvents() {
 
     let arr = getLocalStrgArrData();
     // console.log(arr + " no");
     if (arr != null) {
         let evList = "";
-        let sno = 1;
         for (let i in arr) {
 
             evList += `
-            <li >${arr[i]} &nbsp;&nbsp;<button onclick="confirmation(${i})">x</button></li>`;
+            <li style="width: 100%; display: flex; justify-content: center; align-items: center; padding: 4px 0; overflow: hidden;">${arr[i]} &nbsp;&nbsp;&nbsp; <span class="fa-solid fa-trash" style="cursor: pointer;" onclick="confirmation(${i})"> </span></li>`;
         }
         document.getElementById('evList').innerHTML = evList;
     }
 }
-
 
 const addEvent = (cdate) => {
 
@@ -120,18 +161,11 @@ const addEvent = (cdate) => {
 
             if (id == '') { // Addition
 
-                dt.setDate(cdate);
-                let eventDate = dt.getDate();
-                let eventMonth = dt.getMonth();
-                let eventYear = dt.getFullYear();
-
-                if(eventDate < 10){
-                    eventDate = "0"+eventDate;
-                }
-                if(eventMonth < 10){
-                    eventMonth = "0"+eventMonth;
-                } 
-                let eventVal = eventDate + "-" + eventMonth + "-" + eventYear + "     => " + inputEvent;
+                date.setDate(cdate);
+                let eventDate = date.getDate();
+                let eventMonth = date.getMonth();
+                let eventYear = date.getFullYear();
+                let eventVal = eventDate + "~" + eventMonth + "~" + eventYear + "  =>  " + inputEvent;
 
                 let arr = getLocalStrgArrData();
                 if (arr == null) {
@@ -154,16 +188,15 @@ const addEvent = (cdate) => {
         console.log(inputEvent);
     }
     showEvents();
-    RenderDate();
 }
+
 showEvents();
 
-
 let calDates = document.querySelectorAll('.days');
-for (calDate of calDates) {
-    calDate.addEventListener('click', (e) => {
-        calDateText = e.target.innerText;
-        let intVal = parseInt(calDateText);
+for (item of calDates) {
+    item.addEventListener('click', (e) => {
+        eventText = e.target.innerText;
+        let intVal = parseInt(eventText);
         addEvent(intVal);
     })
     break;
@@ -171,5 +204,12 @@ for (calDate of calDates) {
 
 let liLength = getLocalStrgArrData();
 if (liLength.length < 1) {
-    document.getElementById('evList').innerHTML = "<h4>No event added yet...</h4>";
+    document.getElementById('evList').innerHTML = "<h4 style='text-align: center;'> No event added...😧</h4>";
 }
+
+
+// Tooltip
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+})
