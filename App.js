@@ -202,7 +202,7 @@ for (item of calDates) {
 
 let liLength = getLocalStrgArrData();
 if (liLength.length < 1) {
-    document.getElementById('evList').innerHTML = "<h4 style='text-align: center;'> No event added...😧</h4>";
+    document.getElementById('evList').innerHTML = "<h4 style='text-align: center;'> No event added.!!!</h4>";
 }
 
 
