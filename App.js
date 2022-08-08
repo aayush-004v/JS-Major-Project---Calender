@@ -173,6 +173,3 @@ let liLength = getLocalStrgArrData();
 if (liLength.length < 1) {
     document.getElementById('evList').innerHTML = "<h4>No event added yet...</h4>";
 }
-
-
-
