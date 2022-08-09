@@ -17,20 +17,8 @@ const renderDates = () => {
         0
     ).getDate();
 
-    let months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-    ]
+    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+        "November", "December"]
 
     document.getElementById("month").innerHTML = months[date.getMonth()];
     document.getElementById("month-date").innerHTML = date.toDateString();
@@ -39,7 +27,6 @@ const renderDates = () => {
     for (x = day; x > 0; x--) {
         cells += "<div class='prev_date iterator'>" + (prevDate - x + 1) + "</div>";
     }
-    // console.log(day);
     for (i = 1; i <= endDate; i++) {
         if (i == today.getDate() && date.getMonth() == today.getMonth()) {
             cells += "<div class='today iterator'>" + i + "</div>";
@@ -80,37 +67,38 @@ const getWeather = () => {
         longitude = position.coords.longitude;
 
         let url = api + "?lat=" + latitude + "&lon=" + longitude + "&appid=" + apiKey + "&units=imperial";
-        
+
         fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            //console.log(data);
-            let temp = data.main.temp;
-            //C = 5/9(F-32)
-            //temp = 5/9(temp-32);
-            let C = 5/9 *(temp-32);
-            temperature.innerHTML = C.toFixed() + " °C";
-            let place = data.name + ', ' + data.sys.country;
-            location.innerHTML = place;
-            description.innerHTML = data.weather[0].main;
-        });
+            .then(response => response.json())
+            .then(data => {
+                //console.log(data);
+                let temp = data.main.temp;
+                //C = 5/9(F-32)
+                //temp = 5/9(temp-32);
+                let C = 5 / 9 * (temp - 32);
+                temperature.innerHTML = C.toFixed(2) + "° c";
+                let place = data.name + ', ' + data.sys.country;
+                location.innerHTML = place;
+                description.innerHTML = data.weather[0].main;
+            });
+
     }
 
     function error() {
+        document.getElementById('lctn').style.visibility = "hidden";
+        document.getElementById('temptr').style.visibility = "hidden";
         location.innerHTML = "";
     }
 }
 
-
 // Getting time
 const getTime = () => {
-    let date =  new Date();
+    let date = new Date();
     let time = date.toLocaleTimeString();
     document.getElementById("time").innerText = time;
 }
 
 setInterval(getTime, 1000);
-
 
 //events
 function getLocalStrgArrData() {
@@ -132,6 +120,7 @@ function confirmation(delId) {
     if (confirm("Are you sure want to delete this event...?") == true) {
         deleteEvent(delId);
     }
+    eventHeading();
 }
 
 function showEvents() {
@@ -143,7 +132,9 @@ function showEvents() {
         for (let i in arr) {
 
             evList += `
-            <li style="width: 100%; display: flex; justify-content: center; align-items: center; padding: 4px 0; overflow: hidden;">${arr[i]} &nbsp;&nbsp;&nbsp; <span class="fa-solid fa-trash" style="cursor: pointer;" onclick="confirmation(${i})"> </span></li>`;
+            <li style="width: 100%; display: flex; justify-content: center; 
+            align-items: center; padding: 4px 0; overflow: hidden;">${arr[i]} &nbsp;&nbsp;&nbsp; 
+            <span class="fa-solid fa-trash" style="cursor: pointer;" onclick="confirmation(${i})"></span></li>`;
         }
         document.getElementById('evList').innerHTML = evList;
     }
@@ -186,6 +177,10 @@ const addEvent = (cdate) => {
         console.log(inputEvent);
     }
     showEvents();
+
+    eventHeading();
+
+
 }
 
 showEvents();
@@ -200,11 +195,18 @@ for (item of calDates) {
     break;
 }
 
-let liLength = getLocalStrgArrData();
-if (liLength.length < 1) {
-    document.getElementById('evList').innerHTML = "<h4 style='text-align: center;'> No event added.!!!</h4>";
+function eventHeading() {
+
+    let liLength = getLocalStrgArrData();
+    if (liLength.length < 1) {
+        document.getElementById('evt').style.display = "none";
+    } else {
+
+        document.getElementById('evt').style.display = "";
+    }
 }
 
+eventHeading();
 
 // Tooltip
 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
