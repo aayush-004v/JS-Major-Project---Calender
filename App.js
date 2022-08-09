@@ -89,7 +89,7 @@ const getWeather = () => {
             //C = 5/9(F-32)
             //temp = 5/9(temp-32);
             let C = 5/9 *(temp-32);
-            temperature.innerHTML = C.toFixed(2) + "°C";
+            temperature.innerHTML = C.toFixed() + " °C";
             let place = data.name + ', ' + data.sys.country;
             location.innerHTML = place;
             description.innerHTML = data.weather[0].main;
