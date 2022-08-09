@@ -21,8 +21,13 @@ const renderDates = () => {
         "November", "December"]
 
     document.getElementById("month").innerHTML = months[date.getMonth()];
-    document.getElementById("month-date").innerHTML = date.toDateString();
+    let weeks = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
+    weeks[new Date().getDay()];
+    let dt = new Date().getDate();
+    let fullYear = new Date().getFullYear();
+
+    document.getElementById("month-date").innerHTML = weeks[new Date().getDay()] + " , " + " " + dt + " " + " "+ fullYear;
     let cells = "";
     for (x = day; x > 0; x--) {
         cells += "<div class='prev_date iterator'>" + (prevDate - x + 1) + "</div>";
