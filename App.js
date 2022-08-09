@@ -3,6 +3,7 @@ let date = new Date();
 const renderDates = () => {
 
     getWeather();
+    date.setDate(1);
     let day = date.getDay();
     let today = new Date();
     let endDate = new Date(
@@ -19,8 +20,9 @@ const renderDates = () => {
 
     let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
         "November", "December"]
-
+    
     document.getElementById("month").innerHTML = months[date.getMonth()];
+
     let weeks = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
     weeks[new Date().getDay()];
@@ -76,17 +78,13 @@ const getWeather = () => {
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                //console.log(data);
                 let temp = data.main.temp;
-                //C = 5/9(F-32)
-                //temp = 5/9(temp-32);
                 let C = 5 / 9 * (temp - 32);
                 temperature.innerHTML = C.toFixed() + "° C";
                 let place = data.name + ', ' + data.sys.country;
                 location.innerHTML = place;
                 description.innerHTML = data.weather[0].main;
             });
-
     }
 
     function error() {
