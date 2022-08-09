@@ -13,7 +13,7 @@ body {
     /* background-color: #0099ff; */
     /* background:url(bg-image-1.jpg); */
     background-image: linear-gradient(rgba(4,9,30,0.5)
-    ,rgba(4,9,30,0.5)),url(bg-image-1.jpg);
+    ,rgba(4,9,30,0.5)),url(bg-image.jpg);
     background-position: center;
     background-size: cover;
     position: relative;
